@@ -78,6 +78,9 @@ router.post('/ttorc', async function (req: Request, res: Response) {
         let { data } = await axios.post('http://api.ttocr.com/api/results', {
             appkey: CONFIG.APPKEY,
             resultid: recognizeResult.resultid
+        }).catch((reason) => {
+            console.log(`axios请求查询结果出错`, reason);
+            return { data: { status: 0 } };
         });
         if (data.status === 1) {
             console.log(`识别成功`, data);
