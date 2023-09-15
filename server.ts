@@ -52,7 +52,7 @@ router.post('/ttorc', async function (req: Request, res: Response) {
     };
     console.log('查询参数：', params);
     let { data } = await axios.post('http://api.ttocr.com/api/recognize', params).catch((reason) => {
-        console.log(`axios请求查询出错`, reason);
+        console.log(`axios请求提交查询出错`, reason);
         return { data: { status: 0 } };
     });
     let recognizeResult = data;
