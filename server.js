@@ -1,12 +1,11 @@
-import express from 'express';
-import type { Request, Response } from 'express';
-import http from 'http';
-import axios from 'axios';
+const express = require('express');
+const http = require('http');
+const axios = require('axios');
 
-enum CONFIG {
-    PORT = 3000,
-    APPKEY = 'XXXXXXXXXXXXXXXXX', // 套套打码用户appkey
-}
+const CONFIG = {
+    PORT: 3000,
+    APPKEY: 'XXXXXXXXXXXXXXXXX', // 套套打码用户appkey
+};
 
 let app = express();
 app.use(express.json());
@@ -22,7 +21,7 @@ const flagOff = () => {
     }, 5e3);
 };
 
-const sleep = (sec: number) => {
+const sleep = (sec) => {
     return new Promise((res, rej) => {
         setTimeout(() => {
             res(1);
@@ -34,7 +33,7 @@ const sleep = (sec: number) => {
  * 路由
  */
 let router = express.Router();
-router.post('/ttorc', async function (req: Request, res: Response) {
+router.post('/ttorc', async function (req, res) {
     let { gt, challenge } = req.body;
     if (!gt || !challenge) {
         res.status(400).json({
