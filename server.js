@@ -61,9 +61,9 @@ router.post('/ttorc', async function (req, res) {
         return;
     }
     //获取查询结果
-    let retry = 2; // 获取查询重试次数
+    let retry = 0; // 获取查询重试次数
     await sleep(5); // 等待5s后获取查询结果
-    while (retry > 0) { // 循环获取
+    while (retry <= 3) { // 循环获取，重试三次
         await sleep(1); // 等待1s
         if (flag) {
             flagOff();
@@ -71,7 +71,7 @@ router.post('/ttorc', async function (req, res) {
             console.log('获取查询结果冷却...');
             continue;
         }
-        console.log('获取查询结果...');
+        console.log(`获取查询结果...`);
         let { data } = await axios.post('http://api.ttocr.com/api/results', {
             appkey: config.appkey,
             resultid: recognizeResult.resultid
@@ -87,9 +87,9 @@ router.post('/ttorc', async function (req, res) {
             });
             return;
         } else {
-            console.log(`获取查询结果失败或识别中...重试(${retry})`, results);
+            retry++;
+            console.log(`获取查询结果失败或识别中，稍后重试...`, results);
         }
-        retry--;
     }
     console.log(`获取查询结果失败或超时`);
     res.status(500).json({
