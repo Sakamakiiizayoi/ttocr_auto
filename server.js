@@ -84,7 +84,7 @@ router.post('/ttorc', async function (req, res) {
         });
         if (data.status === 1) {
             console.log(`识别成功`, data);
-            res.json(data);
+            res.json({ msg: '识别成功', data: { result: 'success', validate: data.data.validate } });
             return;
         } else {
             console.log(`查询失败或识别中...重试(${retry})`, data);
@@ -92,7 +92,7 @@ router.post('/ttorc', async function (req, res) {
         retry--;
     }
     console.log(`查询结果失败或超时`);
-    res.status(500).json({ msg: '查询失败' });
+    res.status(500).json({ msg: '查询结果失败或超时', data: { result: 'fail' } });
 });
 
 app.use('/', router);
