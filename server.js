@@ -1,28 +1,27 @@
-import express from 'express';
-import type { Request, Response } from 'express';
-import http from 'http';
-import axios from 'axios';
+const express = require('express');
+const http = require('http');
+const axios = require('axios');
 
-enum CONFIG {
-    PORT = 3000,
-    APPKEY = 'XXXXXXXXXXXXXXXXX', // 套套打码用户appkey
-}
+const CONFIG = {
+    PORT: 3000,
+    APPKEY: 'XXXXXXXXXXXXXXXXX', // 套套打码用户appkey
+};
 
 let app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-let flag = true; //全局查询开关 防止短时间内重复查询导致banip
+let flag = true; // 全局查询开关 防止短时间内重复查询导致banip
 
-const flagOff = () => {
+const flagOff = () => { // 开关冷却5s
     flag = false;
     setTimeout(() => {
         flag = true;
     }, 5e3);
 };
 
-const sleep = (sec: number) => {
+const sleep = (sec) => {
     return new Promise((res, rej) => {
         setTimeout(() => {
             res(1);
@@ -34,7 +33,7 @@ const sleep = (sec: number) => {
  * 路由
  */
 let router = express.Router();
-router.post('/ttorc', async function (req: Request, res: Response) {
+router.post('/ttorc', async function (req, res) {
     let { gt, challenge } = req.body;
     if (!gt || !challenge) {
         res.status(400).json({
@@ -66,9 +65,10 @@ router.post('/ttorc', async function (req: Request, res: Response) {
         return;
     }
     //查询结果
-    let retry = 5; // 查询重试次数
+    let retry = 2; // 查询重试次数
+    await sleep(5); // 等待5s后查询结果
     while (retry > 0) { // 循环查询
-        await sleep(1);
+        await sleep(1); // 等待1s
         if (flag) {
             flagOff();
         } else {
@@ -84,7 +84,7 @@ router.post('/ttorc', async function (req: Request, res: Response) {
         });
         if (data.status === 1) {
             console.log(`识别成功`, data);
-            res.json(data);
+            res.json({ msg: '识别成功', data: { result: 'success', validate: data.data.validate } });
             return;
         } else {
             console.log(`查询失败或识别中...重试(${retry})`, data);
@@ -92,7 +92,7 @@ router.post('/ttorc', async function (req: Request, res: Response) {
         retry--;
     }
     console.log(`查询结果失败或超时`);
-    res.status(500).json({ msg: '查询失败' });
+    res.status(500).json({ msg: '查询结果失败或超时', data: { result: 'fail' } });
 });
 
 app.use('/', router);
