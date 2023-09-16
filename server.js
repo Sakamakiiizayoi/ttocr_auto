@@ -1,16 +1,11 @@
 const express = require('express');
 const http = require('http');
 const axios = require('axios');
-
-const CONFIG = {
-    PORT: 3000,
-    APPKEY: 'XXXXXXXXXXXXXXXXX', // 套套打码用户appkey
-};
+const config = require('./config')
 
 let app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 
 let flag = true; // 全局查询开关 防止短时间内重复查询导致banip
 
@@ -44,7 +39,7 @@ router.post('/ttorc', async function (req, res) {
     }
     //提交查询
     let params = { // 查询参数
-        appkey: CONFIG.APPKEY,
+        appkey: config.appkey,
         gt,
         challenge,
         itemid: 388,
@@ -78,7 +73,7 @@ router.post('/ttorc', async function (req, res) {
             continue;
         }
         let { data } = await axios.post('http://api.ttocr.com/api/results', {
-            appkey: CONFIG.APPKEY,
+            appkey: config.appkey,
             resultid: recognizeResult.resultid
         }).catch((reason) => {
             console.log(`axios请求查询结果出错`, reason);
@@ -113,5 +108,5 @@ let server = http.createServer(app);
 /**
  * 监听端口
  */
-server.listen(CONFIG.PORT);
-console.log(`服务在${CONFIG.PORT}端口上启动成功`);
+server.listen(config.port);
+console.log(`服务在${config.port}端口上启动成功`);
