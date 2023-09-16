@@ -12,9 +12,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 
-let flag = true; //全局查询开关 防止短时间内重复查询导致banip
+let flag = true; // 全局查询开关 防止短时间内重复查询导致banip
 
-const flagOff = () => {
+const flagOff = () => { // 开关冷却5s
     flag = false;
     setTimeout(() => {
         flag = true;
@@ -66,8 +66,9 @@ router.post('/ttorc', async function (req, res) {
     }
     //查询结果
     let retry = 5; // 查询重试次数
+    await sleep(5); // 等待5s后查询结果
     while (retry > 0) { // 循环查询
-        await sleep(1);
+        await sleep(1); // 等待1s
         if (flag) {
             flagOff();
         } else {
