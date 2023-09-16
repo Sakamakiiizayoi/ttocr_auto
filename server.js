@@ -65,7 +65,7 @@ router.post('/ttorc', async function (req, res) {
         return;
     }
     //查询结果
-    let retry = 5; // 查询重试次数
+    let retry = 2; // 查询重试次数
     await sleep(5); // 等待5s后查询结果
     while (retry > 0) { // 循环查询
         await sleep(1); // 等待1s
