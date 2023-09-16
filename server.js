@@ -1,7 +1,7 @@
 const express = require('express');
 const http = require('http');
 const axios = require('axios');
-const config = require('./config')
+const config = require('./config');
 
 let app = express();
 app.use(express.json());
@@ -9,7 +9,7 @@ app.use(express.urlencoded({ extended: false }));
 
 let flag = true; // 全局查询开关 防止短时间内重复查询导致banip
 
-const flagOff = () => { // 开关冷却5s
+const flagOff = () => { // 开关冷却
     flag = false;
     setTimeout(() => {
         flag = true;
@@ -45,14 +45,13 @@ router.post('/ttorc', async function (req, res) {
         itemid: 388,
         referer: 'https://webstatic.mihoyo.com'
     };
-    console.log('查询参数：', params);
+    console.log('提交查询，查询参数：', params);
     let { data } = await axios.post('http://api.ttocr.com/api/recognize', params).catch((reason) => {
-        console.log(`axios请求提交查询出错`, reason);
-        return { data: { status: 0 } };
+        return { data: { status: 0, msg: 'axios请求查询结果出错' } };
     });
     let recognizeResult = data;
     if (recognizeResult.status === 1) {
-        console.log(`提交查询成功，查询凭证为：${recognizeResult.resultid}`);
+        console.log(`提交查询成功，查询凭证为：${recognizeResult.resultid}，等待查询结果...`);
     } else {
         console.log(`提交查询失败！`, recognizeResult);
         res.status(500).json({
@@ -61,39 +60,40 @@ router.post('/ttorc', async function (req, res) {
         });
         return;
     }
-    //查询结果
-    let retry = 2; // 查询重试次数
-    await sleep(5); // 等待5s后查询结果
-    while (retry > 0) { // 循环查询
+    //获取查询结果
+    let retry = 2; // 获取查询重试次数
+    await sleep(5); // 等待5s后获取查询结果
+    while (retry > 0) { // 循环获取
         await sleep(1); // 等待1s
         if (flag) {
             flagOff();
         } else {
-            console.log('等待查询冷却...');
+            console.log('获取查询结果冷却...');
             continue;
         }
+        console.log('获取查询结果...');
         let { data } = await axios.post('http://api.ttocr.com/api/results', {
             appkey: config.appkey,
             resultid: recognizeResult.resultid
         }).catch((reason) => {
-            console.log(`axios请求查询结果出错`, reason);
-            return { data: { status: 0 } };
+            return { data: { status: 0, msg: 'axios请求查询结果出错' } };
         });
-        if (data.status === 1) {
-            console.log(`识别成功`, data);
+        let results = data;
+        if (results.status === 1) {
+            console.log('获取查询结果成功：', results);
             res.json({
                 msg: '识别成功',
-                data: { result: 'success', validate: data.data.validate }
+                data: { result: 'success', validate: results.data.validate }
             });
             return;
         } else {
-            console.log(`查询结果失败或识别中...重试(${retry})`, data);
+            console.log(`获取查询结果失败或识别中...重试(${retry})`, results);
         }
         retry--;
     }
-    console.log(`查询结果失败或超时`);
+    console.log(`获取查询结果失败或超时`);
     res.status(500).json({
-        msg: '查询结果失败或超时',
+        msg: '获取查询结果失败或超时',
         data: { result: 'fail' }
     });
 });
