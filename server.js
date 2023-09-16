@@ -18,7 +18,7 @@ const flagOff = () => { // 开关冷却5s
     flag = false;
     setTimeout(() => {
         flag = true;
-    }, 5e3);
+    }, 2e3);
 };
 
 const sleep = (sec) => {
