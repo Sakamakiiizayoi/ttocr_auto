@@ -33,7 +33,7 @@ router.post('/ttorc', async function (req, res) {
     if (!gt || !challenge) {
         res.status(400).json({
             msg: '请求必须包含gt，challenge',
-            data: { result: 'fail' }
+            data: { result: 'fail', validate: '' }
         });
         return;
     }
@@ -56,7 +56,7 @@ router.post('/ttorc', async function (req, res) {
         console.log(`提交查询失败！`, recognizeResult);
         res.status(500).json({
             msg: '提交查询出错',
-            data: { result: 'fail' }
+            data: { result: 'fail', validate: '' }
         });
         return;
     }
@@ -94,7 +94,7 @@ router.post('/ttorc', async function (req, res) {
     console.log(`获取查询结果失败或超时`);
     res.status(500).json({
         msg: '获取查询结果失败或超时',
-        data: { result: 'fail' }
+        data: { result: 'fail', validate: '' }
     });
 });
 
