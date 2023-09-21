@@ -61,14 +61,14 @@ router.post('/ttorc', async function (req, res) {
         return;
     }
     //获取查询结果
-    let retry = 0; // 获取查询重试次数
-    await sleep(5); // 等待5s后获取查询结果
-    while (retry <= 3) { // 循环获取，重试三次
-        await sleep(1); // 等待1s
-        if (flag) {
+    let ts = new Date().getTime(); // 查询开始时间
+    await sleep(6); // 等待6s后获取查询结果
+    while (true) { // 循环获取
+        if (flag) { // 全局查询冷却
             flagOff();
         } else {
             console.log('获取查询结果冷却...');
+            await sleep(1);
             continue;
         }
         console.log(`获取查询结果...`);
@@ -86,9 +86,15 @@ router.post('/ttorc', async function (req, res) {
                 data: { result: 'success', ...results.data }
             });
             return;
+        } else if (results.status === 4016) { // 查询结果不存在
+            console.log(`查询结果不存在，退出。`, results);
+            break;
         } else {
-            retry++;
             console.log(`获取查询结果失败或识别中，稍后重试...`, results);
+        }
+        if (new Date().getTime() > ts + 50e3) { // 50秒内重试,50秒后退出循环
+            console.log('获取查询结果超时50s，退出。');
+            break;
         }
     }
     console.log(`获取查询结果失败或超时`);
