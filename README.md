@@ -1,6 +1,6 @@
 # TTOCR_AUTO
 
-本项目是一个简易的套套打码平台自动提交查询返回结果的后台
+本项目是一个简易的套套打码平台自动提交查询返回结果的后台，为了使套套打码平台兼容[mystool机器人插件](https://github.com/Ljzd-PRO/nonebot-plugin-mystool)而诞生
 
 使用前请修改config.js中的appkey: 'XXXXXXXXXXXXXXXXX', // 套套打码用户appkey\
 appkey获取：https://www.ttocr.com/
