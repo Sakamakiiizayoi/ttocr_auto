@@ -28,7 +28,7 @@ const sleep = (sec) => {
  * 路由
  */
 let router = express.Router();
-router.post('/ttorc', async function (req, res) {
+router.post('/ttocr', async function (req, res) {
     let { gt, challenge } = req.body;
     if (!gt || !challenge) {
         res.status(400).json({
