@@ -1,6 +1,6 @@
 # TTOCR_AUTO
 
-本项目是一个套套/人人打码平台(分支rr为[人人打码平台](http://www.rrocr.com))自动提交查询返回结果的nodejs简易后端，为了使套套/人人打码平台兼容[mystool机器人插件](https://github.com/Ljzd-PRO/nonebot-plugin-mystool)而诞生。
+本项目是一个套套/人人打码平台(分支rr为[人人打码平台](http://www.rrocr.com)(已跑路))自动提交查询返回结果的nodejs简易后端，为了使套套/人人打码平台兼容[mystool机器人插件](https://github.com/Ljzd-PRO/nonebot-plugin-mystool)而诞生。
 
 使用前请修改config.js中的appkey: 'XXXXXXXXXXXXXXXXX', \
 appkey获取：[套套打码平台](https://www.ttocr.com)/[人人打码平台](http://www.rrocr.com)
