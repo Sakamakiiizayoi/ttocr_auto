@@ -28,7 +28,7 @@ const sleep = (sec) => {
  * 路由
  */
 let router = express.Router();
-router.post('/ttocr', async function (req, res) {
+router.post('/ocr', async function (req, res) {
     let { gt, challenge } = req.body;
     if (!gt || !challenge) {
         res.status(400).json({
@@ -43,7 +43,7 @@ router.post('/ttocr', async function (req, res) {
         gt,
         challenge,
         itemid: 388,
-        referer: 'https://webstatic.mihoyo.com'
+        referer: 'https://act.mihoyo.com'
     };
     console.log('提交查询，查询参数：', params);
     let { data } = await axios.post('http://api.ttocr.com/api/recognize', params).catch((reason) => {
@@ -92,8 +92,8 @@ router.post('/ttocr', async function (req, res) {
         } else {
             console.log(`获取查询结果失败或识别中，稍后重试...`, results);
         }
-        if (new Date().getTime() > ts + 50e3) { // 50秒内重试,50秒后退出循环
-            console.log('获取查询结果超时50s，退出。');
+        if (new Date().getTime() > ts + 58e3) { // 58秒内重试,58秒后退出循环
+            console.log('获取查询结果超时58s，退出。');
             break;
         }
     }
