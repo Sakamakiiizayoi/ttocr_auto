@@ -10,6 +10,6 @@ appkey获取：[套套打码平台(最低30元充值)](https://www.ttocr.com)/[2
 1.安装nodejs\
 2.下载源代码解压到一个目录，记得修改一下config.js里的appkey\
 3.使用命令行工具切换到当前目录，运行npm i 安装好依赖后，使用npm start 运行服务\
-4.mystool插件配置修改，把geetest_url指向后端服务：将图中的127.0.0.1修改成自己服务器的ip，若nodejs服务和机器人同机则可填http://127.0.0.1:3000/ocr \
-![Image](https://github.com/user-attachments/assets/8f26bf91-9774-410e-b2ae-1f3ec51874dc)\
+4.mystool插件配置修改(路径：机器人根目录/data/nonebot-plugin-mystool/configV2.json)，修改global_geetest为true，把geetest_url指向后端服务：将图中的127.0.0.1修改成自己服务器的ip，若nodejs服务和机器人同机则可填http://127.0.0.1:3000/ocr \
+![Image](https://github.com/user-attachments/assets/40ca6a31-ecdb-4822-b2f4-0f6ee08dced1)\
 图中params参数可以填空对象，因为后端已经有appkey了只需要传gt和challenge就可以
