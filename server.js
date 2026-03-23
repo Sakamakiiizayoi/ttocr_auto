@@ -43,7 +43,8 @@ router.post('/ocr', async function (req, res) {
         gt,
         challenge,
         itemid: 388,
-        referer: 'https://act.mihoyo.com'
+        referer: 'https://app.mihoyo.com',
+        userAgent: 'Mozilla/5.0 (Linux; Android 12; Mi 10) AppleWebKit/537.36 Chrome/99 Mobile'
     };
     console.log('提交查询，查询参数：', params);
     let { data } = await axios.post('http://api.ttocr.com/api/recognize', params).catch((reason) => {
